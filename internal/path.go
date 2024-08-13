@@ -38,18 +38,22 @@ type PathMeta struct {
 }
 
 const (
-	HookCurTmpPath = "__VFOX_CURTMPPATH"
+	HomePath       = "VFOX_HOME"
+	HookCurTmpPath = "VFOX_CURTMPPATH"
 )
 
 func newPathMeta() (*PathMeta, error) {
-	userHomeDir, err := os.UserHomeDir()
-	if err != nil {
-		return nil, fmt.Errorf("get user home dir error: %w", err)
+	homePath := os.Getenv(HomePath)
+	if homePath == "" {
+		userHomeDir, err := os.UserHomeDir()
+		if err != nil {
+			return nil, fmt.Errorf("get user home dir error: %w", err)
+		}
+		homePath = filepath.Join(userHomeDir, ".version-fox")
 	}
-	pluginPath := filepath.Join(userHomeDir, ".version-fox", "plugin")
-	homePath := filepath.Join(userHomeDir, ".version-fox")
-	sdkCachePath := filepath.Join(userHomeDir, ".version-fox", "cache")
-	tmpPath := filepath.Join(userHomeDir, ".version-fox", "temp")
+	pluginPath := filepath.Join(homePath, "plugin")
+	sdkCachePath := filepath.Join(homePath, "cache")
+	tmpPath := filepath.Join(homePath, "temp")
 	_ = os.MkdirAll(sdkCachePath, 0755)
 	_ = os.MkdirAll(pluginPath, 0755)
 	_ = os.MkdirAll(tmpPath, 0755)
