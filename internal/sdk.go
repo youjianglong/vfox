@@ -332,6 +332,10 @@ func (b *Sdk) PreUse(version Version, scope UseScope) (Version, error) {
 	// not want to change the version or not implement the PreUse function.
 	// We can simply fuzzy match the version based on the input version.
 	if newVersion == "" {
+		// Before fuzzy matching, perform exact matching first.
+		if b.CheckExists(version) {
+			return version, nil
+		}
 		installedVersions := make(util.VersionSort, 0, len(installedSdks))
 		for _, sdk := range installedSdks {
 			installedVersions = append(installedVersions, string(sdk.Main.Version))
@@ -581,17 +585,17 @@ func (b *Sdk) GetLocalSdkPackage(version Version) (*Package, error) {
 	}
 	for _, d := range dir {
 		if d.IsDir() {
-			split := strings.SplitN(d.Name(), "-", 2)
-			if len(split) != 2 {
-				continue
-			}
-			name := split[0]
-			v := split[1]
-			logger.Debugf("Load SDK package item: name:%s, version: %s \n", name, v)
-			items[name] = &Info{
-				Name:    name,
-				Version: Version(v),
-				Path:    filepath.Join(versionPath, d.Name()),
+			if strings.HasSuffix(d.Name(), string(version)) {
+				name := strings.TrimSuffix(d.Name(), "-"+string(version))
+				if name == "" {
+					continue
+				}
+				logger.Debugf("Load SDK package item: name:%s, version: %s \n", name, version)
+				items[name] = &Info{
+					Name:    name,
+					Version: Version(version),
+					Path:    filepath.Join(versionPath, d.Name()),
+				}
 			}
 		}
 	}
