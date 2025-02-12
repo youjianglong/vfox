@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024 Han Li and contributors
+ *    Copyright 2025 Han Li and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ var Fish Shell = fish{}
 const fishHook = `
 {{.EnvContent}}
 
-set __VFOX_PID %self;
+set -x -g __VFOX_PID %self;
 function __vfox_export_eval --on-event fish_prompt;
 	"{{.SelfPath}}" env -s fish | source;
 
@@ -62,7 +62,7 @@ function cleanup_on_exit --on-process-exit %self
 end;
 `
 
-func (sh fish) Activate() (string, error) {
+func (sh fish) Activate(config ActivateConfig) (string, error) {
 	return fishHook, nil
 }
 

@@ -1,7 +1,7 @@
 //go:build windows
 
 /*
- *    Copyright 2024 Han Li and contributors
+ *    Copyright 2025 Han Li and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import (
 
 	"golang.org/x/sys/windows/registry"
 )
+
+const Newline = "\r\n"
 
 type windowsEnvManager struct {
 	key registry.Key

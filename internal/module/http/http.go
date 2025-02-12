@@ -1,5 +1,5 @@
 /*
- *    Copyright 2024 Han Li and contributors
+ *    Copyright 2025 Han Li and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,14 +18,15 @@ package http
 
 import (
 	"fmt"
-	"github.com/schollz/progressbar/v3"
-	"github.com/version-fox/vfox/internal/config"
-	lua "github.com/yuin/gopher-lua"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
+
+	"github.com/schollz/progressbar/v3"
+	"github.com/version-fox/vfox/internal/config"
+	lua "github.com/yuin/gopher-lua"
 )
 
 type Module struct {
@@ -41,7 +42,7 @@ type Module struct {
 // local http = require("http")
 //
 //	http.get({
-//	    url = "http://ip.jsontest.com/"
+//	    url = "https://httpbin.org/json"
 //	}) return (response, error)
 //
 //	response : {
